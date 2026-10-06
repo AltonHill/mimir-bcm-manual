@@ -25,7 +25,7 @@
 1. Fill in `00-variables.sh` for the site (the "companyify" step — it's the
    only file that changes per deployment).
 2. `source 00-variables.sh` on the machine you're working from.
-3. Work sections **01 → 15 in order**. Each section lists its
+3. Work sections **01 → 16 in order**. Each section lists its
    prerequisites at the top. (13 is optional HA and runs before 05;
    14 is greenfield infrastructure and runs before 01.)
 4. Every command block is copy-pasteable as written (variables already
@@ -50,6 +50,7 @@
 | 13 | BCM HA (optional) | `cmha-setup` — only if doing head-node HA; runs **before** 05 |
 | 14 | Greenfield infra | Jumpbox, DNS (Technitium/site), Chrony — before 01 goes live |
 | 15 | User management | BCM users from CSV, sudoers drop-in, image push |
+| 16 | InfiniBand / GPU fabric | OFED, subnet manager, IPoIB, fabric bandwidth check |
 
 `scripts/generate-nodes.py` turns a CSV inventory into the `cmsh`
 provisioning script for 03 — required at fleet scale (74+ nodes).

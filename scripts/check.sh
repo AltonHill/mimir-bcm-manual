@@ -83,6 +83,7 @@ say "== pass smoke test =="
 # vars pass is EXPECTED to fail on the template's credential placeholders;
 # what matters is that it runs and reports them (not a crash).
 ./scripts/runbook.py --vars 00-variables.sh networks --dry-run >/dev/null 2>&1 || fail=1
+./scripts/runbook.py --vars 00-variables.sh networks --networks scripts/networks-template.csv --dry-run >/dev/null 2>&1 || fail=1
 ./scripts/runbook.py --vars 00-variables.sh images --dry-run >/dev/null 2>&1 || fail=1
 ./scripts/runbook.py --vars 00-variables.sh storage --plan 7a --dry-run >/dev/null 2>&1 || fail=1
 ./scripts/runbook.py --vars 00-variables.sh storage --plan 7b --dry-run >/dev/null 2>&1 || fail=1
@@ -92,6 +93,9 @@ say "== pass smoke test =="
 ./scripts/runbook.py --vars 00-variables.sh nodes --inventory /dev/null >/dev/null 2>&1
 ./scripts/generate-nodes.py --skeleton --ctrl 1 --workers 0 --gpus 1 2>/dev/null | ./scripts/generate-nodes.py --check /dev/stdin >/dev/null 2>&1 || fail=1
 ./scripts/generate-users.py --check scripts/accounts-template.csv >/dev/null 2>&1 || fail=1
+rm -rf /tmp/render-smoke && ./scripts/runbook.py --vars 00-variables.sh render --out /tmp/render-smoke >/dev/null 2>&1 || fail=1
+[ -f /tmp/render-smoke/README.md ] && [ -f /tmp/render-smoke/16-infiniband.md ] || fail=1
+[ ! -f /tmp/render-smoke/99-role-mapping.md ] || fail=1
 say "passes: OK"
 
 if [ "$fail" -eq 0 ]; then say "ALL CHECKS PASSED"; else say "CHECKS FAILED"; fi

@@ -18,8 +18,18 @@
 > `.15` and IPMI on `.12`. Either works; segmented is the template default.
 >
 > **Automate it:** once the table above is approved,
-> `scripts/runbook.py networks` creates/aligns all four networks from
-> `00-variables.sh` (`--dry-run` first, always).
+> `scripts/runbook.py networks` creates/aligns the networks
+> (`--dry-run` first, always). The pass is data-driven: copy
+> `scripts/networks-template.csv` to `networks.csv` and add rows for
+> extra fabrics (GPU east-west Ethernet/InfiniBand, IPMI, ...) — no code
+> changes needed. Without `--networks`, the pass uses the stock
+> 4-network plan from `00-variables.sh`.
+
+```bash
+cp scripts/networks-template.csv networks.csv
+# edit networks.csv: uncomment/add rows per site
+scripts/runbook.py networks --networks networks.csv --dry-run
+```
 
 ## DNS
 

@@ -115,28 +115,109 @@ def pass_vars(vars_, args):
     print(f"OK: {len(vars_)} variables loaded, {len(REQUIRED_VARS)} required all set.")
 
 
-def pass_networks(vars_, args):
-    """Runbook 01: create/align the four BCM networks from the IP plan.
+NET_CSV_COLUMNS = ["name", "cidr", "gateway", "mgmt_allowed", "action", "notes"]
+NET_NAME_RE = re.compile(r"^[a-z][a-z0-9_-]{0,31}$")
 
-    internalnet is created by the BCM installer; the pass aligns it to
-    the plan. storagenet/usernet/mgmtnet are created. Run once — `add`
-    fails if the network already exists.
-    """
-    p, gp = vars_["NET_PROVISION"], vars_["GW_PROVISION"]
-    s = vars_["NET_STORAGE"]
-    u, gu = vars_["NET_USER"], vars_["GW_USER"]
-    o, go = vars_["NET_OOB"], vars_["GW_OOB"]
-    cmds = [
-        f'cmsh -c "network; use internalnet ; set network {p} ; set gateway {gp} ; commit"',
-        f'cmsh -c "network; add storagenet {s} ; commit"',
-        f'cmsh -c "network; use storagenet ; set network {s} ; commit"',
-        f'cmsh -c "network; add usernet {u} ; commit"',
-        f'cmsh -c "network; use usernet ; set network {u} ; set gateway {gu} ; commit"',
-        f'cmsh -c "network; add mgmtnet {o} ; commit"',
-        f'cmsh -c "network; use mgmtnet ; set network {o} ; set gateway {go} ; set managementallowed yes ; commit"',
-        'cmsh -c "network; list"',
+
+def _default_network_rows(vars_):
+    """The stock 4-network plan, built from 00-variables.sh."""
+    return [
+        {"name": "internalnet", "cidr": vars_["NET_PROVISION"],
+         "gateway": vars_["GW_PROVISION"], "mgmt_allowed": "no",
+         "action": "align", "notes": "BCM provisioning"},
+        {"name": "storagenet", "cidr": vars_["NET_STORAGE"],
+         "gateway": "", "mgmt_allowed": "no",
+         "action": "add", "notes": "NFS storage"},
+        {"name": "usernet", "cidr": vars_["NET_USER"],
+         "gateway": vars_["GW_USER"], "mgmt_allowed": "no",
+         "action": "add", "notes": "User/service access"},
+        {"name": "mgmtnet", "cidr": vars_["NET_OOB"],
+         "gateway": vars_["GW_OOB"], "mgmt_allowed": "yes",
+         "action": "add", "notes": "Hardware/BMC management"},
     ]
-    run_commands(cmds, args.dry_run, "create/align the BCM networks")
+
+
+def _load_network_rows(path):
+    """Load networks.csv (skips # comment lines)."""
+    import csv as _csv
+    import ipaddress as _ip
+    rows = []
+    with open(path, newline="") as f:
+        reader = _csv.DictReader(
+            ln for ln in f
+            if ln.strip() and not ln.lstrip().startswith("#")
+        )
+        if reader.fieldnames != NET_CSV_COLUMNS:
+            print(f"ERROR: {path}: expected header exactly: "
+                  f"{','.join(NET_CSV_COLUMNS)}", file=sys.stderr)
+            sys.exit(1)
+        for i, r in enumerate(reader, start=2):
+            if not (r.get("name") or "").strip():
+                continue
+            rows.append({k: (r.get(k) or "").strip() for k in NET_CSV_COLUMNS})
+    errors, seen = [], set()
+    for r in rows:
+        tag = f"networks.csv:{r['name'] or '?'}"
+        if not NET_NAME_RE.match(r["name"]):
+            errors.append(f"{tag}: bad network name '{r['name']}'")
+        if r["name"] in seen:
+            errors.append(f"{tag}: duplicate network name")
+        seen.add(r["name"])
+        try:
+            _ip.ip_network(r["cidr"], strict=False)
+        except ValueError:
+            errors.append(f"{tag}: bad CIDR '{r['cidr']}'")
+        if r["gateway"]:
+            try:
+                _ip.ip_address(r["gateway"])
+            except ValueError:
+                errors.append(f"{tag}: bad gateway '{r['gateway']}'")
+        if r["mgmt_allowed"] not in ("yes", "no"):
+            errors.append(f"{tag}: mgmt_allowed must be yes|no")
+        if r["action"] not in ("add", "align"):
+            errors.append(f"{tag}: action must be add|align")
+    if errors:
+        print(f"{len(errors)} problem(s) in networks.csv:", file=sys.stderr)
+        for e in errors:
+            print(f"  - {e}", file=sys.stderr)
+        sys.exit(1)
+    return rows
+
+
+def pass_networks(vars_, args):
+    """Runbook 01: create/align the BCM networks.
+
+    Data-driven: --networks networks.csv (copy scripts/networks-template.csv).
+    Without --networks, falls back to the stock 4-network plan from
+    00-variables.sh. Adding a fabric (GPU east-west, IB, IPMI) is a new
+    CSV row — no code changes.
+    """
+    if args.networks:
+        rows = _load_network_rows(args.networks)
+        print(f"# networks pass: {len(rows)} networks from {args.networks}",
+              file=sys.stderr)
+    else:
+        rows = _default_network_rows(vars_)
+        print("# networks pass: stock 4-network plan from 00-variables.sh "
+              "(--networks networks.csv for extras)", file=sys.stderr)
+    cmds = []
+    for r in rows:
+        name, cidr = r["name"], r["cidr"]
+        if r["action"] == "align":
+            # created by the BCM installer; align it to the plan
+            c = f'cmsh -c "network; use {name} ; set network {cidr}'
+            if r["gateway"]:
+                c += f' ; set gateway {r["gateway"]}'
+            cmds.append(c + ' ; commit"')
+        else:
+            cmds.append(f'cmsh -c "network; add {name} {cidr} ; commit"')
+            cmds.append(f'cmsh -c "network; use {name} ; set network {cidr} ; commit"')
+            if r["gateway"]:
+                cmds.append(f'cmsh -c "network; use {name} ; set gateway {r["gateway"]} ; commit"')
+            if r["mgmt_allowed"] == "yes":
+                cmds.append(f'cmsh -c "network; use {name} ; set managementallowed yes ; commit"')
+    cmds.append('cmsh -c "network; list"')
+    run_commands(cmds, args.dry_run, f"create/align {len(rows)} BCM networks")
 
 
 def pass_images(vars_, args):
@@ -291,6 +372,69 @@ def pass_disklayouts(vars_, args):
     run_commands(cmds, args.dry_run, f"apply the {ntype} disk layout")
 
 
+def _expand_vars(vars_):
+    """Expand nested $REFs inside variable values (e.g. DNS_IP="$NET_DNS1")."""
+    vals = dict(vars_)
+    for _ in range(5):
+        changed = False
+        for k, v in vals.items():
+            nv = re.sub(r'\$\{([A-Za-z_][A-Za-z0-9_]*)\}',
+                        lambda m: vals.get(m.group(1), m.group(0)), v)
+            nv = re.sub(r'\$([A-Za-z_][A-Za-z0-9_]*)',
+                        lambda m: vals.get(m.group(1), m.group(0)), nv)
+            if nv != v:
+                vals[k] = nv
+                changed = True
+        if not changed:
+            break
+    return vals
+
+
+def _sub_vars(text, vals):
+    text = re.sub(r'\$\{([A-Za-z_][A-Za-z0-9_]*)\}',
+                  lambda m: vals.get(m.group(1), m.group(0)), text)
+    text = re.sub(r'\$([A-Za-z_][A-Za-z0-9_]*)',
+                  lambda m: vals.get(m.group(1), m.group(0)), text)
+    return text
+
+
+def pass_render(vars_, args):
+    """Build the site-specific MD guide: copy every doc, substitute all
+    $VARS with values from 00-variables.sh.
+
+    Three workflows, one guarantee — the rendered guide always exists:
+      client walkthrough:  render -> hand the MDs over, copy/paste together
+      team review:         render -> review -> run the passes with --exec
+      run then document:   run the passes with --exec -> render as the deliverable
+
+    Never modifies the template docs; writes a fresh directory.
+    99-role-mapping.md is merge documentation, not deployment docs — skipped.
+    """
+    docs_dir = os.path.dirname(os.path.abspath(args.vars))
+    out = args.out
+    os.makedirs(out, exist_ok=True)
+    vals = _expand_vars(vars_)
+    skip = {"99-role-mapping.md"}
+    n = 0
+    for fn in sorted(os.listdir(docs_dir)):
+        if not fn.endswith(".md") or fn in skip:
+            continue
+        with open(os.path.join(docs_dir, fn)) as f:
+            text = f.read()
+        with open(os.path.join(out, fn), "w") as f:
+            f.write(_sub_vars(text, vals))
+        n += 1
+    unfilled = sorted(k for k, v in vals.items() if "<" in v and ">" in v)
+    print(f"# render: {n} docs -> {out}/ (skipped: {', '.join(sorted(skip))})",
+          file=sys.stderr)
+    if unfilled:
+        print(f"# warning: {len(unfilled)} placeholders unfilled: "
+              f"{', '.join(unfilled)}", file=sys.stderr)
+        print("# run `runbook.py vars` for the full list", file=sys.stderr)
+    else:
+        print("# render: all variables filled", file=sys.stderr)
+
+
 def pass_nodes(vars_, args):
     gn = load_script_module("generate-nodes.py")
     rows = gn.load(args.inventory)
@@ -352,8 +496,10 @@ def main():
     sub = ap.add_subparsers(dest="pass_", required=True)
 
     sub.add_parser("vars", parents=[common], help="validate the variables file")
-    sub.add_parser("networks", parents=[common],
-                   help="runbook 01: create/align the BCM networks")
+    p = sub.add_parser("networks", parents=[common],
+                       help="runbook 01: create/align the BCM networks")
+    p.add_argument("--networks", default=None,
+                   help="networks CSV (default: stock plan from 00-variables.sh)")
     sub.add_parser("images", parents=[common],
                    help="runbook 03: categories + software images")
     p = sub.add_parser("nodes", parents=[common],
@@ -368,6 +514,10 @@ def main():
     p = sub.add_parser("users", parents=[common],
                        help="runbook 15: create BCM users from CSV")
     p.add_argument("--accounts", required=True)
+    p = sub.add_parser("render", parents=[common],
+                       help="build the site-specific MD guide (variable substitution)")
+    p.add_argument("--out", default="site-docs",
+                   help="output directory (default: site-docs)")
 
     args = ap.parse_args()
     if not os.path.exists(args.vars):
@@ -381,7 +531,8 @@ def main():
     vars_ = load_vars(args.vars)
     {"vars": pass_vars, "networks": pass_networks, "images": pass_images,
      "nodes": pass_nodes, "disklayouts": pass_disklayouts,
-     "storage": pass_storage, "users": pass_users}[args.pass_](vars_, args)
+     "storage": pass_storage, "users": pass_users,
+     "render": pass_render}[args.pass_](vars_, args)
 
 
 if __name__ == "__main__":

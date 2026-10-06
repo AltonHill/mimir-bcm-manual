@@ -1,0 +1,20 @@
+# networks.csv — BCM networks for `runbook.py networks`.
+# Copy to networks.csv and edit per site. Add rows for extra fabrics
+# (GPU east-west Ethernet/InfiniBand, IPMI, ...) — no code changes needed.
+#
+# Columns:
+#   name          BCM network name
+#   cidr          CIDR (validated)
+#   gateway       gateway IP, empty if none
+#   mgmt_allowed  yes|no -> `set managementallowed yes`
+#   action        align = created by the BCM installer (internalnet);
+#                 add   = created by this pass
+name,cidr,gateway,mgmt_allowed,action,notes
+internalnet,10.10.15.0/24,10.10.15.1,no,align,BCM provisioning (created by installer; pass aligns it)
+storagenet,10.10.12.0/24,,no,add,Pure NFS storage
+usernet,10.10.13.0/24,10.10.13.1,no,add,User/service access (MetalLB, ingress)
+mgmtnet,10.10.16.0/24,10.10.16.1,yes,add,Hardware/BMC management
+# --- per-site extras (uncomment / add rows as needed) ---
+#gpu-eth,10.10.20.0/24,,no,add,GPU east-west fabric (Ethernet)
+#gpu-ib,10.10.21.0/24,,no,add,GPU east-west fabric (InfiniBand / IPoIB)
+#ipminet,10.10.17.0/24,10.10.17.1,yes,add,IPMI (if split from mgmtnet)

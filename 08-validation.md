@@ -62,3 +62,106 @@ kubectl label nodes <node-name> node-role.kubernetes.io/worker=true
 
 - [ ] Every node labeled per its role; GPU nodes carry NVIDIA capacity
       labels (`nvidia.com/gpu.count` etc.)
+
+## 8.5 — GPU burn-in
+
+Run every GPU hot before handing the cluster over. The burn is a
+PyTorch matmul loop (no dataset, no network) — if a GPU can't sustain
+it, you want to know now, not mid-training.
+
+Label the GPU nodes first (one label, used by the Job below):
+
+```bash
+kubectl label nodes $GPU_WORKERS burnin/gpu=true
+```
+
+```yaml
+# gpu-burnin.yaml — ConfigMap (the script) + Job (one pod per GPU node)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gpu-burnin-script
+data:
+  burn.py: |
+    import os, time, torch
+    size = int(os.environ.get("BURN_SIZE", "8192"))
+    dur = int(os.environ.get("BURN_SECS", "1800"))  # 30 min default
+    devs = [f"cuda:{i}" for i in range(torch.cuda.device_count())]
+    print(f"burn: {len(devs)} GPUs, {size}x{size} matmul, {dur}s", flush=True)
+    ts = [torch.randn(size, size, device=d) for d in devs]
+    torch.cuda.synchronize()
+    end, it = time.time() + dur, 0
+    while time.time() < end:
+        for t in ts:
+            t @ t
+        torch.cuda.synchronize()
+        it += 1
+        if it % 20 == 0:
+            print(f"iter {it}", flush=True)
+    print(f"done: {it} iterations", flush=True)
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gpu-burnin
+spec:
+  parallelism: 3     # = number of GPU nodes; one pod per node
+  completions: 3
+  template:
+    metadata:
+      labels:
+        app: gpu-burnin
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        burnin/gpu: "true"
+      containers:
+      - name: burn
+        image: nvcr.io/nvidia/pytorch:24.10-py3   # needs NGC pull secret (see 09)
+        command: ["python", "-u", "/burn/burn.py"]
+        env:
+        - name: BURN_SECS
+          value: "1800"
+        resources:
+          limits:
+            nvidia.com/gpu: 8     # adjust to the node's GPU count
+        volumeMounts:
+        - name: burn-script
+          mountPath: /burn
+      volumes:
+      - name: burn-script
+        configMap:
+          name: gpu-burnin-script
+```
+
+```bash
+kubectl apply -f gpu-burnin.yaml
+kubectl get jobs -w                        # wait for Complete
+kubectl logs -l app=gpu-burnin --tail=5    # iter counts + "done"
+```
+
+While it runs, watch thermals/power on a couple of nodes:
+
+```bash
+nvidia-smi dmon -s pucvmet   # power, util, clocks, temp per GPU
+dmesg | grep -i xid          # expect: nothing
+```
+
+- [ ] All pods `Complete`; iteration counts consistent across nodes
+      (an outlier node is suspect — investigate before handoff)
+- [ ] No Xid errors; temps stabilize below throttling
+
+### Via Run:ai
+
+**GUI:** Workloads → New Training workload → name `gpu-burnin`,
+project, image `nvcr.io/nvidia/pytorch:24.10-py3`, 8 GPUs, command
+`python -u /burn/burn.py` (mount the script via a ConfigMap-backed
+volume, or paste the compact form into the command field). Same
+`BURN_SECS` env.
+
+**CLI (v2):** submit from a manifest —
+`runai workload submit --file workload.yaml --project <project>`
+(see `runai workload submit --help` and the CLI reference at
+run-ai-docs.nvidia.com — flags move between releases, so verify
+against the installed CLI). The Job YAML above is the source of truth
+for image, command, and GPU count.

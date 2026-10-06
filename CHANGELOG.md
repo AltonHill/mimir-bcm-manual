@@ -4,6 +4,27 @@ All notable changes to the template. Dates in America/Chicago.
 
 ## Unreleased
 
+## 0.9.0 — 2026-10-06
+
+- New `render` pass: builds the site-specific MD guide — copies every
+  doc to `--out` (default `site-docs/`) with variables substituted
+  (nested refs expanded, `99-role-mapping.md` skipped, unfilled
+  placeholders warned). Serves all three workflows: client
+  copy/paste walkthrough, team review-then-automate, and run-then-
+  document. The template docs are never modified.
+
+## 0.8.0 — 2026-10-06
+
+- `networks` pass is now data-driven: `--networks networks.csv`
+  (copy `scripts/networks-template.csv`); extra fabrics (GPU east-west
+  Ethernet/IB, IPMI) are new CSV rows, no code changes. Falls back to
+  the stock 4-network plan from `00-variables.sh` without `--networks`.
+- New section 16: InfiniBand / GPU fabric at host level (OFED, subnet
+  manager, IPoIB, `ib_write_bw` check). Not in the source guides —
+  standard DGX/BCM practice, marked as such.
+- New 8.5: GPU burn-in — PyTorch matmul Job (fleet-wide via
+  parallelism), watch commands, plus Run:ai GUI and CLI paths.
+
 ## 0.7.0 — 2026-10-06
 
 - Pass framework grows to 7: new `networks` (01), `storage` (07,

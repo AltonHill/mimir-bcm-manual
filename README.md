@@ -4,7 +4,7 @@
 > on DGX GPU nodes — the Chaska lab's canonical procedure, merged with the
 > fixes discovered in the field, automation included.
 
-`version 0.7.0` · `scripts/check.sh` passing · Python 3.12 stdlib-only · anonymous by design
+`version 0.9.0` · `scripts/check.sh` passing · Python 3.12 stdlib-only · anonymous by design
 
 ## Quickstart
 
@@ -57,12 +57,34 @@ accounts.csv ─────▶└──▶ runbook.py users       15 · BCM use
 | Pass | Runbook | Input | Does |
 |---|---|---|---|
 | `vars` | 00 | `00-variables.sh` | Fails if any placeholder is unfilled |
-| `networks` | 01 | variables | Creates `storagenet`/`usernet`/`mgmtnet`, aligns `internalnet` |
+| `networks` | 01 | variables or `networks.csv` | Creates/aligns BCM networks — **data-driven**: add rows to `networks.csv` (GPU east-west, IB, IPMI) with no code changes; `--networks` selects the file, otherwise the stock 4-network plan from variables |
 | `images` | 03 | variables | Creates categories, clones images (picks `dgx-image` vs `default-image` from `GPU_NODE_TYPE`), assigns images to categories |
 | `nodes` | 03 | inventory CSV | Validates, then provisions every node |
 | `disklayouts` | 12 | `disk-layouts/<type>-by-path.xml` | Applies the layout at category level; stops with the collection procedure if the XML isn't built yet (it needs live hardware) |
 | `storage` | 07 | variables | Installs the NFS CSI driver, generates + applies StorageClasses (`--plan 7a`: one default class; `--plan 7b`: data/scratch/models) |
 | `users` | 15 | accounts CSV | Creates BCM users (minimal `cmsh` form — extra switches cause OpenLDAP weirdness); `--sudoers` emits the sudoers drop-in |
+| `render` | — | variables | Builds the site-specific MD guide: copies every doc, substitutes every variable (skips `99-role-mapping.md`, warns on unfilled placeholders) |
+
+### The three workflows
+
+```
+client walkthrough:   render -> hand the MDs over, copy/paste together
+team review:          render -> review -> run the passes with --exec
+run then document:    run the passes with --exec -> render as the deliverable
+```
+
+One guarantee across all three: **the rendered MD guide always gets
+built.** It's a final deliverable — the first and last thing the
+customer sees.
+
+```bash
+scripts/runbook.py render --out site-docs/
+# 19 docs -> site-docs/, every variable filled in, placeholders flagged
+```
+
+The template docs are never modified; render writes a fresh directory
+every time. The template stays pristine — the site's truth lives in
+`00-variables.sh` + the three CSVs.
 
 ### Writing a new pass
 
@@ -99,6 +121,7 @@ flags), `backup` (11).
 | 13 | BCM HA (optional) | `cmha-setup` — before 05 |
 | 14 | Greenfield infra | Jumpbox, DNS, Chrony — before 01 |
 | 15 | User management | BCM users from CSV, sudoers, image push |
+| 16 | InfiniBand / GPU fabric | OFED, subnet manager, IPoIB, fabric bandwidth check |
 | 99 | Role mapping | Lab ↔ client ↔ template identifier Rosetta Stone |
 
 Delete `99-role-mapping.md` from an instantiated site copy — it
@@ -115,6 +138,7 @@ you can build in a spreadsheet and export.
 | `check.sh` | **Validate everything** — run after any edit, before any commit |
 | `generate-nodes.py` | Node inventory CSV → `cmsh` provisioning script (dup-IP/MAC/hostname checks, `--skeleton` for fill-in sheets) |
 | `generate-users.py` | Account CSV (`username,sudo`) → minimal `cmsh -q` user-creation script (dup-username checks); `--sudoers` emits the sudoers drop-in; `accounts-template.csv` is the fill-in starter |
+| `networks-template.csv` | Fill-in starter for the data-driven `networks` pass |
 
 ## Anonymizer pack (optional)
 
