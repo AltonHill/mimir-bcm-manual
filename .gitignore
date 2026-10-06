@@ -1,0 +1,19 @@
+# Site-instantiated files — never commit these.
+# They contain real hostnames, IPs, MACs, and account names.
+inventory.csv
+accounts.csv
+*-inventory.csv
+*-accounts.csv
+provision-nodes.sh
+create-users.sh
+bcm-admins
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor / OS
+.DS_Store
+*~
+*.swp
