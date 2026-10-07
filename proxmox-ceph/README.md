@@ -81,12 +81,13 @@ site's deliverable.
 
 ## End result
 
+![Cerberus — hyperconverged Proxmox VE + Ceph architecture](docs/diagrams/architecture.svg)
+
 Three ThinkSystem SR650 V4 nodes, hyperconverged: Proxmox VE cluster on
 top, Ceph Tentacle underneath (MON/MGR/OSD per node, size=3/min_size=2),
 HA with hardware watchdog fencing, Proxmox Backup Server on its
 dedicated host, and a validation section that proves it by breaking
-things on purpose. The full architecture lives in
-[docs/diagrams/architecture.svg](docs/diagrams/architecture.svg).
+things on purpose.
 
 ## Layout
 

@@ -34,6 +34,11 @@ customer sees.
 
 ![One solution — GPU + virtualization, same library](docs/diagrams/solution-endstate.svg)
 
+And the management stack up close — the hyperconverged Proxmox VE +
+Ceph cluster that backs the whole solution:
+
+![Cerberus — hyperconverged Proxmox VE + Ceph architecture](proxmox-ceph/docs/diagrams/architecture.svg)
+
 The GPU track scales to 128 workers and beyond (256-node layouts are a
 future exercise — IP planning at that scale needs its own design pass).
 The virtualization track is a 3-node hyperconverged Proxmox VE + Ceph
