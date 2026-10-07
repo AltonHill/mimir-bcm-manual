@@ -106,6 +106,23 @@ only with measured demand.
   switch's shipped Cumulus 5.x; confirm against on-box `nv set interface <leg>
   bridge ?` before scripting.
 
+### 3b. Netris OOB VLAN (data side)
+
+The Netris controller nodes run as **VMs on the Proxmox hosts**. They reach
+the data-side OOB network over a dedicated VLAN on the 1GbE path:
+
+- Proxmox vSwitch (Linux bridge) on the dedicated 1Gb vLinks carries the
+  OOB VLAN; each Netris VM gets a **dedicated vNIC** on that VLAN.
+- This is the **data-side** OOB path — it is **separate from XCC true OOB**
+  (BMC), which stays on its own physical path. The architecture diagram
+  shows them as two different lines for a reason: two failure domains.
+- **VLAN ID and subnet TBD** — record them here when assigned; the Netris
+  VM vNICs and any IP plan for this VLAN follow the site's addressing.
+- **Bootstrap order matters:** physical mgmt links → Proxmox cluster →
+  Netris VMs → Netris-managed fabric. Netris automates the fabric, but the
+  Netris VMs themselves depend on Proxmox being up — never assume the
+  fabric is automated before the VMs that automate it exist.
+
 ---
 
 ## 4. Generate and apply `/etc/network/interfaces` (per node)
