@@ -32,6 +32,13 @@ customer sees.
 
 ![End result — 128-node BCM + Run:ai GPU cluster](docs/diagrams/cluster-128.svg)
 
+The head node itself has four deployment options — one VM on Proxmox
+(the standard: snapshots anytime, hypervisor failover, none of CMHA's
+MySQL/quorum headaches) versus single baremetal, BCM HA on baremetal,
+or BCM HA across two VMs:
+
+![BCM head-node topologies — four options](docs/diagrams/headnode-options.svg)
+
 ![One solution — GPU + virtualization, same library](docs/diagrams/solution-endstate.svg)
 
 And the management stack up close — the hyperconverged Proxmox VE +

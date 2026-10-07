@@ -108,12 +108,24 @@ flags), `backup` (11).
 
 ![End result — 128-node BCM + Run:ai GPU cluster](../docs/diagrams/cluster-128.svg)
 
-What a completed build looks like: HA head-node pair, 128 B300 workers
-in four blocks of 32, three fabrics (mgmt, cluster, InfiniBand),
-head-node NFS with the CSI driver, Kubernetes + Run:ai on top — every
-value from `00-variables.sh`, every step from the rendered guide.
-256-node layouts are a future exercise (IP planning at that scale needs
-its own design pass).
+What a completed build looks like: the head node as a single VM on
+Proxmox (the standard), NFS served from the head node over
+`internalnet`, 128 B300 workers in four blocks of 32, three fabrics,
+Kubernetes + Run:ai on the workers — every value from
+`00-variables.sh`, every step from the rendered guide. 256-node layouts
+are a future exercise (IP planning at that scale needs its own design
+pass).
+
+### Head-node topologies
+
+![BCM head-node topologies — four options](../docs/diagrams/headnode-options.svg)
+
+Four ways to deploy the head node. The standard is one VM on Proxmox:
+snapshot before/after/during BCM config changes, and let Proxmox HA
+handle failover — no `cmha-setup` (§13), no MySQL replication sync
+quirks, no external quorum disk. BCM HA on baremetal is the classic
+alternative when policy requires it; the other two cover labs and
+edge cases.
 
 ## Sections
 
