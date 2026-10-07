@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1020" viewBox="0 0 1500 1020" font-family="DejaVu Sans, 'Liberation Sans', sans-serif">
+<title>Cerberus per-node cable diagram</title>
+<rect x="0" y="0" width="1500" height="1020" rx="0" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="750" y="44" font-size="26" fill="#1f2937" font-weight="bold" text-anchor="middle">Cerberus — Per-Node Cable Plan</text>
+<text x="750" y="70" font-size="13.5" fill="#6b7280" font-weight="normal" text-anchor="middle">Every cable per node: source port → destination port · cable type · purpose</text>
+<rect x="40" y="100" width="440" height="738" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="260.0" y="132" font-size="19" fill="#1f2937" font-weight="bold" text-anchor="middle">node-1</text>
+<text x="260.0" y="154" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">ThinkSystem SR650 V4</text>
+<line x1="56" y1="164" x2="464" y2="164" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="52" y="174" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="196" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P1</text>
+<line x1="196" y1="191" x2="234" y2="191" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,185 234,197 243,191" fill="#1f2937"/>
+<rect x="246" y="174" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="196" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-A · p1 · leg 1</text>
+<text x="52" y="232" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="52" y="254" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch A (Ceph + VM traffic)</text>
+<line x1="56" y1="278" x2="464" y2="278" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="52" y="286" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="308" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P2</text>
+<line x1="196" y1="303" x2="234" y2="303" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,297 234,309 243,303" fill="#1f2937"/>
+<rect x="246" y="286" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="308" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-B · p1 · leg 1</text>
+<text x="52" y="344" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="52" y="366" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch B (redundant path)</text>
+<line x1="56" y1="390" x2="464" y2="390" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="52" y="398" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="420" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">OCP · port 1</text>
+<line x1="196" y1="415" x2="234" y2="415" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,409 234,421 243,415" fill="#1f2937"/>
+<rect x="246" y="398" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="420" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 1</text>
+<text x="52" y="456" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="52" y="478" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Proxmox management network</text>
+<line x1="56" y1="502" x2="464" y2="502" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="52" y="510" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="532" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">XCC / BMC</text>
+<line x1="196" y1="527" x2="234" y2="527" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,521 234,533 243,527" fill="#1f2937"/>
+<rect x="246" y="510" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="532" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 2</text>
+<text x="52" y="568" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="52" y="590" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Out-of-band management (XCC)</text>
+<line x1="56" y1="614" x2="464" y2="614" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="52" y="622" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="644" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-1</text>
+<line x1="196" y1="639" x2="234" y2="639" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,633 234,645 243,639" fill="#1f2937"/>
+<rect x="246" y="622" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="644" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-A</text>
+<text x="52" y="680" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="52" y="702" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Primary power feed</text>
+<line x1="56" y1="726" x2="464" y2="726" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="52" y="734" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="121" y="756" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-2</text>
+<line x1="196" y1="751" x2="234" y2="751" stroke="#1f2937" stroke-width="2"/>
+<polygon points="234,745 234,757 243,751" fill="#1f2937"/>
+<rect x="246" y="734" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="340" y="756" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-B</text>
+<text x="52" y="792" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="52" y="814" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Redundant feed — separate PDU</text>
+<rect x="530" y="100" width="440" height="738" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="750.0" y="132" font-size="19" fill="#1f2937" font-weight="bold" text-anchor="middle">node-2</text>
+<text x="750.0" y="154" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">ThinkSystem SR650 V4</text>
+<line x1="546" y1="164" x2="954" y2="164" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="542" y="174" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="196" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P1</text>
+<line x1="686" y1="191" x2="724" y2="191" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,185 724,197 733,191" fill="#1f2937"/>
+<rect x="736" y="174" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="196" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-A · p1 · leg 2</text>
+<text x="542" y="232" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="542" y="254" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch A (Ceph + VM traffic)</text>
+<line x1="546" y1="278" x2="954" y2="278" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="542" y="286" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="308" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P2</text>
+<line x1="686" y1="303" x2="724" y2="303" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,297 724,309 733,303" fill="#1f2937"/>
+<rect x="736" y="286" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="308" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-B · p1 · leg 2</text>
+<text x="542" y="344" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="542" y="366" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch B (redundant path)</text>
+<line x1="546" y1="390" x2="954" y2="390" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="542" y="398" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="420" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">OCP · port 1</text>
+<line x1="686" y1="415" x2="724" y2="415" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,409 724,421 733,415" fill="#1f2937"/>
+<rect x="736" y="398" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="420" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 3</text>
+<text x="542" y="456" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="542" y="478" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Proxmox management network</text>
+<line x1="546" y1="502" x2="954" y2="502" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="542" y="510" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="532" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">XCC / BMC</text>
+<line x1="686" y1="527" x2="724" y2="527" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,521 724,533 733,527" fill="#1f2937"/>
+<rect x="736" y="510" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="532" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 4</text>
+<text x="542" y="568" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="542" y="590" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Out-of-band management (XCC)</text>
+<line x1="546" y1="614" x2="954" y2="614" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="542" y="622" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="644" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-1</text>
+<line x1="686" y1="639" x2="724" y2="639" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,633 724,645 733,639" fill="#1f2937"/>
+<rect x="736" y="622" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="644" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-A</text>
+<text x="542" y="680" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="542" y="702" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Primary power feed</text>
+<line x1="546" y1="726" x2="954" y2="726" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="542" y="734" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="611" y="756" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-2</text>
+<line x1="686" y1="751" x2="724" y2="751" stroke="#1f2937" stroke-width="2"/>
+<polygon points="724,745 724,757 733,751" fill="#1f2937"/>
+<rect x="736" y="734" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="830" y="756" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-B</text>
+<text x="542" y="792" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="542" y="814" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Redundant feed — separate PDU</text>
+<rect x="1020" y="100" width="440" height="738" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="1240.0" y="132" font-size="19" fill="#1f2937" font-weight="bold" text-anchor="middle">node-3</text>
+<text x="1240.0" y="154" font-size="12" fill="#6b7280" font-weight="normal" text-anchor="middle">ThinkSystem SR650 V4</text>
+<line x1="1036" y1="164" x2="1444" y2="164" stroke="#cbd5e1" stroke-width="1"/>
+<rect x="1032" y="174" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="196" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P1</text>
+<line x1="1176" y1="191" x2="1214" y2="191" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,185 1214,197 1223,191" fill="#1f2937"/>
+<rect x="1226" y="174" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="196" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-A · p1 · leg 3</text>
+<text x="1032" y="232" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="1032" y="254" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch A (Ceph + VM traffic)</text>
+<line x1="1036" y1="278" x2="1444" y2="278" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1032" y="286" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="308" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">BF3 · P2</text>
+<line x1="1176" y1="303" x2="1214" y2="303" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,297 1214,309 1223,303" fill="#1f2937"/>
+<rect x="1226" y="286" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="308" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN5610-B · p1 · leg 3</text>
+<text x="1032" y="344" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Breakout DAC: OSFP-800G → 4× QSFP112-200G</text>
+<text x="1032" y="366" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Fabric uplink via switch B (redundant path)</text>
+<line x1="1036" y1="390" x2="1444" y2="390" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1032" y="398" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="420" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">OCP · port 1</text>
+<line x1="1176" y1="415" x2="1214" y2="415" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,409 1214,421 1223,415" fill="#1f2937"/>
+<rect x="1226" y="398" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="420" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 5</text>
+<text x="1032" y="456" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="1032" y="478" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Proxmox management network</text>
+<line x1="1036" y1="502" x2="1444" y2="502" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1032" y="510" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="532" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">XCC / BMC</text>
+<line x1="1176" y1="527" x2="1214" y2="527" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,521 1214,533 1223,527" fill="#1f2937"/>
+<rect x="1226" y="510" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="532" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">SN2201 · port 6</text>
+<text x="1032" y="568" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: Cat6</text>
+<text x="1032" y="590" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Out-of-band management (XCC)</text>
+<line x1="1036" y1="614" x2="1444" y2="614" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1032" y="622" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="644" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-1</text>
+<line x1="1176" y1="639" x2="1214" y2="639" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,633 1214,645 1223,639" fill="#1f2937"/>
+<rect x="1226" y="622" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="644" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-A</text>
+<text x="1032" y="680" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="1032" y="702" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Primary power feed</text>
+<line x1="1036" y1="726" x2="1444" y2="726" stroke="#e2e8f0" stroke-width="1"/>
+<rect x="1032" y="734" width="138" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1101" y="756" font-size="12.5" fill="#1f2937" font-weight="bold" text-anchor="middle">PSU-2</text>
+<line x1="1176" y1="751" x2="1214" y2="751" stroke="#1f2937" stroke-width="2"/>
+<polygon points="1214,745 1214,757 1223,751" fill="#1f2937"/>
+<rect x="1226" y="734" width="188" height="34" rx="6" fill="#ffffff" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1320" y="756" font-size="12" fill="#1f2937" font-weight="bold" text-anchor="middle">PDU-B</text>
+<text x="1032" y="792" font-size="11.5" fill="#374151" font-weight="normal" text-anchor="start" font-family="DejaVu Sans Mono, monospace">Cable: C13/C14 power</text>
+<text x="1032" y="814" font-size="11.5" fill="#6b7280" font-weight="normal" text-anchor="start">Purpose: Redundant feed — separate PDU</text>
+<text x="60" y="874" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">•  Breakout DAC-1 → SN5610-A OSFP port 1: leg 1→node-1 P1 · leg 2→node-2 P1 · leg 3→node-3 P1 · leg 4→spare</text>
+<text x="60" y="900" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">•  Breakout DAC-2 → SN5610-B OSFP port 1: leg 1→node-1 P2 · leg 2→node-2 P2 · leg 3→node-3 P2 · leg 4→spare</text>
+<text x="60" y="926" font-size="12.5" fill="#1f2937" font-weight="normal" text-anchor="start">•  Each node's two 200G links land on DIFFERENT switches · OCP ports 2–4 spare · PBS host: fabric + SN2201 port 7</text>
+</svg>

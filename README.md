@@ -1,183 +1,94 @@
-# B300 Deployment Runbook — Template
+# Mimir's Manual
 
-> An executable deployment recipe for BCM 11 + Kubernetes + NVIDIA Run:ai
-> on DGX GPU nodes — the Chaska lab's canonical procedure, merged with the
-> fixes discovered in the field, automation included.
+> The runbook library — executable, customer-anonymized deployment recipes
+> for GPU and virtualization infrastructure. Pick a track, companyify it,
+> build.
 
-`version 0.9.0` · `scripts/check.sh` passing · Python 3.12 stdlib-only · anonymous by design
+`library 1.0.0` · Python 3.12 stdlib-only · anonymous by design
+
+## The tracks
+
+| Track | Stack | Directory | For |
+|---|---|---|---|
+| **BCM** | BCM 11 + Kubernetes + NVIDIA Run:ai on DGX GPU nodes | `bcm/` | GPU clusters, AI factories — the 74× B300 rollout and beyond |
+| **Proxmox-Ceph** | Proxmox VE + Ceph, hyperconverged, 3 nodes | `proxmox-ceph/` | General virtualization on NVMe — synchronous replication, PBS, HA |
+
+A site gets one track or the other — never both. Each track is a
+complete, standalone deployment package: its own README, its own
+variables file, its own scripts.
 
 ## Quickstart
 
 ```bash
-# 1. Companyify: fill in the one file that changes per site
-nvim 00-variables.sh && source 00-variables.sh
+# 1. Pick your track and read its README first
+less bcm/README.md            # GPU / Run:ai
+less proxmox-ceph/README.md   # virtualization / Ceph
 
-# 2. Validate before anything else
-scripts/runbook.py vars                                  # fails on unfilled placeholders
-scripts/check.sh                                         # full template validation
+# 2. Companyify: fill in the one variables file per track
+nvim bcm/00-variables.sh && source bcm/00-variables.sh
+# or: nvim proxmox-ceph/runbook/00-overview/variables.sh
 
-# 3. Run the deployment as composable passes (dry-run first, always)
-scripts/runbook.py networks --dry-run
-scripts/runbook.py images --dry-run
-scripts/runbook.py nodes --inventory inventory.csv --dry-run
+# 3. Validate, then run the track's automation (dry-run first, always)
+bcm/scripts/runbook.py vars
+bcm/scripts/check.sh
+bash proxmox-ceph/scripts/check.sh
+bash proxmox-ceph/scripts/preflight.sh --dry-run
+
+# 4. Render the site-specific guide — always built, it's a final deliverable
+bcm/scripts/runbook.py render --out site-docs/
+proxmox-ceph/scripts/render.py --out site-docs/
 ```
 
-## The companyify flow
+## Shared conventions
 
-1. **Copy** this directory for the site.
-2. **Fill in `00-variables.sh`** — it's the only file that changes per
-   deployment. Domain, networks, node names, IPs, credentials (as
-   placeholder names), versions.
-3. `source 00-variables.sh` on the machine you're working from.
-4. **Work sections 01 → 15 in order**, or run the matching
-   `runbook.py` pass. Each section lists prerequisites at the top and
-   ends with verification checkboxes. (13 is optional HA and runs before
-   05; 14 is greenfield infra and runs before 01.)
-5. Every `bash` block is copy-pasteable once the variables are sourced.
-   `<PLACEHOLDER>` values must be replaced; `UPPER_CASE` names come from
-   `00-variables.sh`.
+Both tracks were built to the same contract, so they line up:
 
-## Automation: the pass framework
+- **Anonymous by design** — role-based names only (`gpu-worker-1`,
+  `node-1/2/3`), no customer identifiers anywhere, credentials as
+  placeholders. The anonymizer pack (see `bcm/README.md`) scrubs source
+  bundles before they leave your laptop.
+- **Variables-first** — one file per site holds every site value
+  (`bcm/00-variables.sh`, `proxmox-ceph/runbook/00-overview/variables.sh`).
+  Everything else is copy-pasteable as written.
+- **Dry-run scripts** — automation prints what it would do before doing
+  it (`--dry-run` default; `--exec` asks for confirmation). Nothing
+  runs blind.
+- **Validate everything** — `bcm/scripts/check.sh` (bash/YAML/Python/
+  variable sanity/leak scan/pass smoke tests); Cerberus scripts are
+  idempotent with `--dry-run` and confirmation prompts.
+- **Docs are deliverables** — each track renders its site-specific MD guide
+  (`bcm/scripts/runbook.py render`, `proxmox-ceph/scripts/render.py`);
+  the Proxmox track also ships a customer-facing design brief
+  (`docs/customer-design-brief.{md,docx,pdf}`).
 
-The end goal is one small, reviewable, re-runnable pass per runbook
-section — each driven by data files instead of hand-typed commands.
-`--dry-run` is the default and prints exactly what would run; `--exec`
-asks for confirmation first. Passes run on the BCM head node as root.
-
-```
-00-variables.sh ──┬──▶ runbook.py vars         validate the variables file
-                  ├──▶ runbook.py networks    01 · create/align BCM networks
-                  ├──▶ runbook.py images      03 · categories + software images
-inventory.csv ────▶├──▶ runbook.py nodes       03 · provision nodes from CSV
-disk-layouts/ ────▶├──▶ runbook.py disklayouts 12 · disk XML → category
-                  ├──▶ runbook.py storage     07 · NFS CSI driver + StorageClasses
-accounts.csv ─────▶└──▶ runbook.py users       15 · BCM users + sudoers drop-in
-```
-
-| Pass | Runbook | Input | Does |
-|---|---|---|---|
-| `vars` | 00 | `00-variables.sh` | Fails if any placeholder is unfilled |
-| `networks` | 01 | variables or `networks.csv` | Creates/aligns BCM networks — **data-driven**: add rows to `networks.csv` (GPU east-west, IB, IPMI) with no code changes; `--networks` selects the file, otherwise the stock 4-network plan from variables |
-| `images` | 03 | variables | Creates categories, clones images (picks `dgx-image` vs `default-image` from `GPU_NODE_TYPE`), assigns images to categories |
-| `nodes` | 03 | inventory CSV | Validates, then provisions every node |
-| `disklayouts` | 12 | `disk-layouts/<type>-by-path.xml` | Applies the layout at category level; stops with the collection procedure if the XML isn't built yet (it needs live hardware) |
-| `storage` | 07 | variables | Installs the NFS CSI driver, generates + applies StorageClasses (`--plan 7a`: one default class; `--plan 7b`: data/scratch/models) |
-| `users` | 15 | accounts CSV | Creates BCM users (minimal `cmsh` form — extra switches cause OpenLDAP weirdness); `--sudoers` emits the sudoers drop-in |
-| `render` | — | variables | Builds the site-specific MD guide: copies every doc, substitutes every variable (skips `99-role-mapping.md`, warns on unfilled placeholders) |
-
-### The three workflows
+## Layout
 
 ```
-client walkthrough:   render -> hand the MDs over, copy/paste together
-team review:          render -> review -> run the passes with --exec
-run then document:    run the passes with --exec -> render as the deliverable
+mimir-manual/
+  README.md            # this file — pick a track
+  bcm/                 # BCM 11 + Kubernetes + Run:ai track
+    README.md          # track guide (quickstart, pass framework, sections)
+    00-overview.md … 16-infiniband.md, 99-role-mapping.md
+    00-variables.sh    # the companyify target
+    scripts/           # runbook.py (8 passes), generators, check.sh
+  proxmox-ceph/        # Proxmox VE + Ceph track (Cerberus)
+    README.md          # track guide
+    runbook/           # 00-overview … 07-validation, one dir per section
+    scripts/           # preflight.sh, net-verify.sh, backup-drill.sh
+    docs/              # design briefs, diagrams, references
 ```
-
-One guarantee across all three: **the rendered MD guide always gets
-built.** It's a final deliverable — the first and last thing the
-customer sees.
-
-```bash
-scripts/runbook.py render --out site-docs/
-# 19 docs -> site-docs/, every variable filled in, placeholders flagged
-```
-
-The template docs are never modified; render writes a fresh directory
-every time. The template stays pristine — the site's truth lives in
-`00-variables.sh` + the three CSVs.
-
-### Writing a new pass
-
-1. Add a `pass_<name>(vars_, args)` function in `scripts/runbook.py` —
-   build a command list, print it under `--dry-run`, run it under
-   `--exec` via the `run_commands()` helper.
-2. Register it in the subparsers (deployment order) and the dispatch
-   dict at the bottom of `main()`.
-3. Add any new inputs to `REQUIRED_VARS` so `runbook.py vars` catches
-   them missing.
-4. Add a smoke line to `scripts/check.sh` and a row to the table above.
-
-Next candidates: `certs` (06), `k8s` (05, wrapping `cm-kubernetes-setup`
-flags), `backup` (11).
-
-## Sections
-
-| # | File | What happens |
-|---|---|---|
-| — | `00-overview.md` | How to use this template |
-| — | `00-variables.sh` | **The companyify target** — all site values |
-| 01 | Environment & IP plan | Networks, DNS, inventory — get sign-off first |
-| 02 | BCM head node install | ISO, licensing, upgrades, base config |
-| 03 | Images, categories, nodes | Software images, categories, provisioning, IPMI |
-| 04 | NVIDIA drivers | Driver install/repair inside images |
-| 05 | Kubernetes | `cm-kubernetes-setup`, 14-operator set |
-| 06 | Run:ai | Certs, `cm-runai-setup`, gateway listeners, placement, backups |
-| 07 | Storage | Head-node NFS + CSI driver; **7A** simple / **7B** advanced plans |
-| 08 | Validation | GPU, platform, workload smoke tests |
-| 09 | NIM Operator | NGC secrets, NIMCache, model validation |
-| 10 | Decisions & issues | Deviation log |
-| 11 | Backup, recovery, handoff | Backups, rollback, handoff checklist |
-| 12 | Disk layouts | by-path XMLs per DGX model |
-| 13 | BCM HA (optional) | `cmha-setup` — before 05 |
-| 14 | Greenfield infra | Jumpbox, DNS, Chrony — before 01 |
-| 15 | User management | BCM users from CSV, sudoers, image push |
-| 16 | InfiniBand / GPU fabric | OFED, subnet manager, IPoIB, fabric bandwidth check |
-| 99 | Role mapping | Lab ↔ client ↔ template identifier Rosetta Stone |
-
-Delete `99-role-mapping.md` from an instantiated site copy — it
-documents the merge, not the deployment.
-
-## Scripts
-
-`scripts/` holds the table-driven tooling. Everything reads plain CSVs
-you can build in a spreadsheet and export.
-
-| Script | Purpose |
-|---|---|
-| `runbook.py` | **Pass runner** — composable sub-passes, one per runbook job (above) |
-| `check.sh` | **Validate everything** — run after any edit, before any commit |
-| `generate-nodes.py` | Node inventory CSV → `cmsh` provisioning script (dup-IP/MAC/hostname checks, `--skeleton` for fill-in sheets) |
-| `generate-users.py` | Account CSV (`username,sudo`) → minimal `cmsh -q` user-creation script (dup-username checks); `--sudoers` emits the sudoers drop-in; `accounts-template.csv` is the fill-in starter |
-| `networks-template.csv` | Fill-in starter for the data-driven `networks` pass |
-
-## Anonymizer pack (optional)
-
-`anonymizer-pack.tar.gz` (separate download) is the companion tool for
-scrubbing a *source* bundle — raw client docs, Obsidian exports — before
-they leave your laptop. Four passes, stdlib-only, no network, no LLM:
-
-1. **Client names** → stand-in (`--replacement`, default `Wayland Megacorp`)
-2. **Networks** → sequential doc ranges (`10.10.11.0/24`, …; host octets preserved)
-3. **InfiniBand** → `<ib-guid-001>` etc.
-4. **Hostnames** → `node-001.example.internal`, … (explicit `--domains` list)
-
-It re-scans its own output and prints `LEAK` lines for anything that
-survived. Always `--dry-run` first.
-
-```bash
-tar -xzf anonymizer-pack.tar.gz && cd anonymizer-pack
-./anonymize.py --client "Acme Widgets" --domains "acme.com" --scan ~/obsidian/bcm-bundle | nvim -
-./anonymize.py --client "Acme Widgets" --domains "acme.com" --dry-run ~/obsidian/bcm-bundle | nvim -
-./anonymize.py --client "Acme Widgets" --domains "acme.com" --out ~/bcm-bundle-anon ~/obsidian/bcm-bundle
-```
-
-Use `--client-file names.txt` (one per line) so real customer names never
-land in shell history. This template itself was scrubbed with it — the
-`check.sh` leak scan is the ongoing guard.
 
 ## Requirements
 
-- **Python 3.12** — stock on Ubuntu 24.04, which is what DGX OS and the
-  BCM head node are based on. No pip packages needed; everything here
-  is standard library only (`csv`, `argparse`, `ipaddress`, `re`,
-  `subprocess`). Verify: `python3 --version`
-- `cmsh` passes run **on the BCM head node** as root.
-- `bash`, standard coreutils.
+- **BCM track:** Python 3.12 (stock on Ubuntu 24.04 / DGX OS), stdlib
+  only; `cmsh` passes run on the BCM head node as root.
+- **Proxmox track:** Proxmox VE 9.2.x nodes; scripts run on the nodes
+  themselves (see each script's header).
 
 ## Conventions
 
-- `bash` blocks run on the BCM head node unless labeled otherwise.
-- Field notes (`> **Field note**`) mark where the client deployment
-  diverged from the lab procedure — read them.
-- `[restored]` marks lab procedures the client docs had dropped.
+- `bash` blocks run on the relevant head/management node unless labeled
+  otherwise.
+- `<PLACEHOLDER>` values must be replaced; `UPPER_CASE` names come from
+  the track's variables file.
 - Credentials are always placeholders — never commit real values.

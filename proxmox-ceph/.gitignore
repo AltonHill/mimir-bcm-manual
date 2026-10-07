@@ -1,0 +1,19 @@
+# Build artifacts and local-only files — never commit these.
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# Credentials and secrets — placeholders only in the repo.
+*.env
+bridge.env
+*credentials*
+*secret*
+*.pem
+*.key
+id_rsa*
+
+# Editor noise
+.vscode/
+.idea/
+*~
