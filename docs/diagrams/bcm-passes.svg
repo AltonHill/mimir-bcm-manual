@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="620" viewBox="0 0 940 620" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+<rect width="940" height="620" fill="#ffffff" rx="8"/>
+<defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#64748b"/></marker></defs>
+<text x="24" y="34" font-size="20" font-weight="700" fill="#1e293b">BCM track — the pass framework</text>
+<text x="24" y="56" font-size="12" fill="#64748b">runbook.py: one reviewable, re-runnable pass per job. --dry-run prints, --exec asks first.</text>
+<rect x="24" y="96" width="180" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="114.0" y="120.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">00-variables.sh</text>
+<rect x="24" y="156" width="180" height="44" rx="8" fill="#fef3c7" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="114.0" y="180.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">networks.csv *</text>
+<rect x="24" y="276" width="180" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="114.0" y="300.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">inventory.csv</text>
+<rect x="24" y="336" width="180" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="114.0" y="360.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">disk-layouts/</text>
+<rect x="24" y="456" width="180" height="44" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="114.0" y="480.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">accounts.csv</text>
+<rect x="300" y="96" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="120.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py vars</text>
+<text x="500" y="123" font-size="12" fill="#64748b">00 · validate</text>
+<rect x="300" y="156" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="180.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py networks</text>
+<text x="500" y="183" font-size="12" fill="#64748b">01 · networks</text>
+<rect x="300" y="216" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="240.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py images</text>
+<text x="500" y="243" font-size="12" fill="#64748b">03 · images</text>
+<rect x="300" y="276" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="300.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py nodes</text>
+<text x="500" y="303" font-size="12" fill="#64748b">03 · nodes</text>
+<rect x="300" y="336" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="360.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py disklayouts</text>
+<text x="500" y="363" font-size="12" fill="#64748b">12 · disk layouts</text>
+<rect x="300" y="396" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="420.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py storage</text>
+<text x="500" y="423" font-size="12" fill="#64748b">07 · storage</text>
+<rect x="300" y="456" width="180" height="44" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="390.0" y="480.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">runbook.py users</text>
+<text x="500" y="483" font-size="12" fill="#64748b">15 · users</text>
+<line x1="204" y1="118" x2="296" y2="118" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="118" x2="296" y2="178" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="118" x2="296" y2="238" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="118" x2="296" y2="418" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="178" x2="296" y2="178" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+<line x1="204" y1="298" x2="296" y2="298" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="358" x2="296" y2="358" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="204" y1="478" x2="296" y2="478" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="24" y="600" font-size="11" fill="#64748b">* optional — without it, the stock 4-network plan from 00-variables.sh is used</text>
+<rect x="300" y="530" width="340" height="52" rx="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="470.0" y="549.5" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">render  →  site-docs/</text>
+<text x="470.0" y="566.5" font-size="11" fill="#e9e4ff" text-anchor="middle">the deliverable</text>
+<polyline points="390,500 390,530" fill="none" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+</svg>

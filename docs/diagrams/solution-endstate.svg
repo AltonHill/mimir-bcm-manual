@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="460" viewBox="0 0 1040 460" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+<rect width="1040" height="460" fill="#ffffff" rx="8"/>
+<defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#64748b"/></marker></defs>
+<text x="24" y="34" font-size="20" font-weight="700" fill="#1e293b">One solution — GPU + virtualization, same library</text>
+<text x="24" y="56" font-size="12" fill="#64748b">The tracks deploy separately but land together. One library covers the whole site.</text>
+<rect x="40" y="96" width="280" height="220" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="180.0" y="182.5" font-size="14" font-weight="700" fill="#1e293b" text-anchor="middle">GPU cluster</text>
+<text x="180.0" y="199.5" font-size="11" fill="#64748b" text-anchor="middle">128× B300 workers</text>
+<text x="180.0" y="216.5" font-size="11" fill="#64748b" text-anchor="middle">BCM 11 · K8s · Run:ai</text>
+<text x="180.0" y="233.5" font-size="11" fill="#64748b" text-anchor="middle">bcm/ track</text>
+<rect x="380" y="96" width="280" height="220" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="520.0" y="182.5" font-size="14" font-weight="700" fill="#1e293b" text-anchor="middle">Shared core</text>
+<text x="520.0" y="199.5" font-size="11" fill="#64748b" text-anchor="middle">DNS · NTP · identity</text>
+<text x="520.0" y="216.5" font-size="11" fill="#64748b" text-anchor="middle">management network</text>
+<text x="520.0" y="233.5" font-size="11" fill="#64748b" text-anchor="middle">monitoring</text>
+<rect x="720" y="96" width="280" height="220" rx="8" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/>
+<text x="860.0" y="182.5" font-size="14" font-weight="700" fill="#1e293b" text-anchor="middle">Virtualization</text>
+<text x="860.0" y="199.5" font-size="11" fill="#64748b" text-anchor="middle">3× Proxmox VE + Ceph</text>
+<text x="860.0" y="216.5" font-size="11" fill="#64748b" text-anchor="middle">HA · PBS backups</text>
+<text x="860.0" y="233.5" font-size="11" fill="#64748b" text-anchor="middle">proxmox-ceph/ track</text>
+<line x1="320" y1="186" x2="376" y2="186" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="660" y1="186" x2="716" y2="186" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="376" y1="200" x2="320" y2="200" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="716" y1="200" x2="660" y2="200" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="320" y1="244" x2="376" y2="244" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="660" y1="244" x2="716" y2="244" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="376" y1="258" x2="320" y2="258" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="716" y1="258" x2="660" y2="258" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="40" y="352" width="960" height="60" rx="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="520.0" y="375.5" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Mimir's Manual — one library, two tracks</text>
+<text x="520.0" y="392.5" font-size="11" fill="#e9e4ff" text-anchor="middle">rendered guides as deliverables, every engagement</text>
+</svg>

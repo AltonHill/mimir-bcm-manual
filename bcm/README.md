@@ -44,6 +44,8 @@ section — each driven by data files instead of hand-typed commands.
 `--dry-run` is the default and prints exactly what would run; `--exec`
 asks for confirmation first. Passes run on the BCM head node as root.
 
+![BCM track — the pass framework](../docs/diagrams/bcm-passes.svg)
+
 ```
 00-variables.sh ──┬──▶ runbook.py vars         validate the variables file
                   ├──▶ runbook.py networks    01 · create/align BCM networks
@@ -66,6 +68,8 @@ accounts.csv ─────▶└──▶ runbook.py users       15 · BCM use
 | `render` | — | variables | Builds the site-specific MD guide: copies every doc, substitutes every variable (skips `99-role-mapping.md`, warns on unfilled placeholders) |
 
 ### The three workflows
+
+![Three workflows, one guarantee](../docs/diagrams/workflows.svg)
 
 ```
 client walkthrough:   render -> hand the MDs over, copy/paste together
@@ -99,6 +103,17 @@ every time. The template stays pristine — the site's truth lives in
 
 Next candidates: `certs` (06), `k8s` (05, wrapping `cm-kubernetes-setup`
 flags), `backup` (11).
+
+## End result
+
+![End result — 128-node BCM + Run:ai GPU cluster](../docs/diagrams/cluster-128.svg)
+
+What a completed build looks like: HA head-node pair, 128 B300 workers
+in four blocks of 32, three fabrics (mgmt, cluster, InfiniBand),
+head-node NFS with the CSI driver, Kubernetes + Run:ai on top — every
+value from `00-variables.sh`, every step from the rendered guide.
+256-node layouts are a future exercise (IP planning at that scale needs
+its own design pass).
 
 ## Sections
 

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="400" viewBox="0 0 940 400" font-family="system-ui,-apple-system,'Segoe UI',sans-serif">
+<rect width="940" height="400" fill="#ffffff" rx="8"/>
+<defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L8,4.5 L0,9 z" fill="#64748b"/></marker></defs>
+<text x="24" y="34" font-size="20" font-weight="700" fill="#1e293b">Three workflows, one guarantee</text>
+<text x="24" y="56" font-size="12" fill="#64748b">Pick the path that fits the engagement — the rendered guide is always built.</text>
+<rect x="24" y="78" width="160" height="64" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="104.0" y="112.0" font-size="13" font-weight="700" fill="#1e293b" text-anchor="middle">Client walkthrough</text>
+<line x1="184" y1="110" x2="210" y2="110" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="210" y="78" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="280.0" y="112.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">render</text>
+<line x1="350" y1="110" x2="370" y2="110" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="370" y="78" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="440.0" y="112.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">hand over MDs</text>
+<line x1="510" y1="110" x2="530" y2="110" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="530" y="78" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="600.0" y="112.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">copy/paste together</text>
+<polyline points="670,110 705,110 705,210 736,210" fill="none" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="24" y="178" width="160" height="64" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="104.0" y="212.0" font-size="13" font-weight="700" fill="#1e293b" text-anchor="middle">Team review</text>
+<line x1="184" y1="210" x2="210" y2="210" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="210" y="178" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="280.0" y="212.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">render</text>
+<line x1="350" y1="210" x2="370" y2="210" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="370" y="178" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="440.0" y="212.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">team review</text>
+<line x1="510" y1="210" x2="530" y2="210" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="530" y="178" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="600.0" y="212.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">run passes --exec</text>
+<line x1="670" y1="210" x2="736" y2="210" stroke="#7c3aed" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="24" y="278" width="160" height="64" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="104.0" y="312.0" font-size="13" font-weight="700" fill="#1e293b" text-anchor="middle">Run then document</text>
+<line x1="184" y1="310" x2="210" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="210" y="278" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="280.0" y="312.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">run passes --exec</text>
+<line x1="350" y1="310" x2="370" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="370" y="278" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="440.0" y="312.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">render</text>
+<line x1="510" y1="310" x2="530" y2="310" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="530" y="278" width="140" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="600.0" y="312.0" font-size="12" font-weight="700" fill="#1e293b" text-anchor="middle">deliverable</text>
+<polyline points="670,310 705,310 705,210 736,210" fill="none" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="740" y="140" width="176" height="140" rx="8" fill="#7c3aed" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="828.0" y="195.0" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">Rendered site guide</text>
+<text x="828.0" y="212.0" font-size="11" fill="#e9e4ff" text-anchor="middle">ALWAYS BUILT</text>
+<text x="828.0" y="229.0" font-size="11" fill="#e9e4ff" text-anchor="middle">final deliverable</text>
+</svg>

@@ -34,6 +34,8 @@ scripts/render.py --vars site-vars.sh --out site-docs/
 
 ## The three workflows
 
+![Three workflows, one guarantee](../docs/diagrams/workflows.svg)
+
 **1. Client walkthrough** — they copy/paste, you guide:
 ```bash
 scripts/render.py --vars site-vars.sh --out client-docs/
@@ -66,6 +68,25 @@ time. The template stays pristine — the site's truth lives in your
 shell loop variables inside the docs (e.g. `${NODE_NUM}`, set per-node at
 deploy time) are left untouched. Anything still `PLACEHOLDER` or empty is
 reported, not hidden.
+
+## Section workflow
+
+![Proxmox-Ceph track — section workflow](../docs/diagrams/cerberus-workflow.svg)
+
+Follow the sections 00 → 07 in order (00a physical bring-up first on
+baremetal). The scripts guard each stage: `preflight.sh` before the
+install, `net-verify.sh` after the network build, `backup-drill.sh`
+around the PBS work — and `render.py` turns the whole thing into the
+site's deliverable.
+
+## End result
+
+Three ThinkSystem SR650 V4 nodes, hyperconverged: Proxmox VE cluster on
+top, Ceph Tentacle underneath (MON/MGR/OSD per node, size=3/min_size=2),
+HA with hardware watchdog fencing, Proxmox Backup Server on its
+dedicated host, and a validation section that proves it by breaking
+things on purpose. The full architecture lives in
+[docs/diagrams/architecture.svg](docs/diagrams/architecture.svg).
 
 ## Layout
 
